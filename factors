@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# split a number >> 64-bit
+handle_big () {
+	num=$1
+	len=$2
+	first=${num:0:$((len/2))}
+	second=${num:$((len/2)):$(((len/2)+(len%2)))}
+	factors=($(factor $num))
+	x=${factors[1]}
+	rem="$((first%x))$second"
+	printf "$num=$((first/x))$((rem/x))*$x\n"
+}
+
+# handle factoring
+while read line; do
+	if [ ${#line} -ge 18 ]; then
+		handle_big $line ${#line}
+		continue
+	fi
+	factors=($(factor $line))
+	echo -e "${line}=$((line/factors[1]))*${factors[1]}"
+done < $1
