@@ -4,17 +4,32 @@
 handle_big () {
 	num=$1
 	len=$2
+	factors=($(factor $num))
+        x=${factors[1]}
+
+	if [ $len -gt 36 ]; then
+		i=$(((len/15) + (len%15)))
+		next=0
+		sum=0
+		for j in $(seq 1 $i); do
+			val=${num:$(((j*18) - 18)):$((j*18))}
+			[[ $next -gt 0 ]] && val="$next$val"
+			[[ $sum -eq 0 ]] && sum="$((val/x))"
+			[[ $sum -ne 0 ]] && sum="$sum$((val/x))"
+			next=$((val%x))
+		done
+		printf "$num=$sum*$x\n"	
+		return
+	fi
 	first=${num:0:$((len/2))}
 	second=${num:$((len/2)):$(((len/2)+(len%2)))}
-	factors=($(factor $num))
-	x=${factors[1]}
 	rem="$((first%x))$second"
 	printf "$num=$((first/x))$((rem/x))*$x\n"
 }
 
 # handle factoring
 while read line; do
-	if [ ${#line} -ge 18 ]; then
+	if [ ${#line} -gt 18 ]; then
 		handle_big $line ${#line}
 		continue
 	fi
