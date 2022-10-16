@@ -3,7 +3,7 @@
 #include <string>
 #include <cstdlib>
 
-#define LEN 15
+#define LEN 18
 
 using namespace std;
 typedef long long int llint;
@@ -19,13 +19,17 @@ class RsaRef {
 		 * 
 		 * @param line string numbers
 		 */
-	    RsaRef(string line) {
-		    if (line.length() <= 19) small_nums(line);
-		    else big_nums(line);
+	    RsaRef(char *fileName) {
+		    file = fileName;
 	    }
+
+		void run(void)
+		{
+			handler(file);
+		}
 	
 	private:
-
+		char *file;
 		/**
 		 * @brief Handle large numbers
 		 * 
@@ -33,7 +37,7 @@ class RsaRef {
 		 */
 		void big_nums(string line)
 		{
-		    string num[1024];
+			string num[1024];
 		    string res = "";
 		    int i, j;
 
@@ -80,6 +84,19 @@ class RsaRef {
 			cout << line << "=" << num / x << "*" << x << endl;
 		}
 
+		void handler(char *fileName)
+		{
+			ifstream file(fileName);
+			string line;
+
+			for (; getline(file, line);)
+			{
+				if (line.length() <= 19) small_nums(line);
+				else big_nums(line);
+			}
+			file.close();
+		}
+
 };
 
 /**
@@ -90,11 +107,9 @@ class RsaRef {
  */
 int main(__attribute__((unused)) int ac, char **av)
 {
-	ifstream file(av[1]);
+	RsaRef fact(av[1]);
 
-	string line;
-	while (getline(file, line))
-		RsaRef disp(line);
+	fact.run();
 
-	file.close();
+	return (0);
 }
