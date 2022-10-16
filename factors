@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # split a number >> 64-bit
 handle_big () {
 	num=$1
@@ -36,3 +35,6 @@ while read line; do
 	factors=($(factor $line))
 	echo -e "${line}=$((line/factors[1]))*${factors[1]}"
 done < $1
+
+unset handle_big
+exit 0
