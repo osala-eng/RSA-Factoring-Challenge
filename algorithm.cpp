@@ -3,7 +3,7 @@
 #include <string>
 #include <cstdlib>
 
-#define LEN 3
+#define LEN 19
 
 using namespace std;
 typedef long long int llint;
